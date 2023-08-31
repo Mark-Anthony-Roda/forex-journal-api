@@ -1,0 +1,8 @@
+{
+  "extends": ["plugin:adonis/typescriptApp", "prettier", "plugin:prettier/recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": 0,
+    "@typescript-eslint/naming-convention": 0
+  }
+}
