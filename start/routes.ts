@@ -21,6 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 import 'App/Routes/V1/Auth'
+import 'App/Routes/V1/Trade'
 
 Route.get('/', async () => {
   return { hello: 'world' }

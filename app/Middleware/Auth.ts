@@ -7,10 +7,9 @@ import User from 'App/Models/User'
 export default class Auth {
   public async handle({ request }: HttpContextContract, next: () => Promise<void>) {
     // code for middleware goes here. ABOVE THE NEXT CALL
+    const token = request.headers().authorization?.split(' ')[1]
+    if (!token) throw new UnAuthorizedException('Token not found')
     try {
-      const token = request.headers().authorization?.split(' ')[1]
-      if (!token) throw new UnAuthorizedException('Token not found')
-
       const decoded: any = jwt.verify(token, Env.get('APP_SECRET'), {})
 
       const user = await User.query()
