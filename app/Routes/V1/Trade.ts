@@ -2,6 +2,7 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
   Route.post('trade', 'TradesController.store')
+  Route.put('trade/:id', 'TradesController.update')
   Route.get('trades', 'TradesController.index')
   Route.get('trade/:id', 'TradesController.show')
   Route.delete('trade/:id', 'TradesController.destroy')

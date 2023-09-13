@@ -6,12 +6,21 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
+      table.string('formatted_id')
       table
         .integer('instrument_id')
         .unsigned()
         .notNullable()
         .references('id')
         .inTable('instruments')
+        .onDelete('restrict')
+
+      table
+        .integer('account_id')
+        .unsigned()
+        .nullable()
+        .references('id')
+        .inTable('accounts')
         .onDelete('restrict')
 
       table.enu('position', ['Buy', 'Sell']).notNullable().index()

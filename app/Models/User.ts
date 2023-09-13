@@ -2,14 +2,20 @@ import { DateTime } from 'luxon'
 import {
   BaseModel,
   BelongsTo,
+  ManyToMany,
+  ModelQueryBuilderContract,
   afterCreate,
   beforeSave,
   belongsTo,
   column,
+  manyToMany,
+  scope,
 } from '@ioc:Adonis/Lucid/Orm'
 import File from './File'
 import Hash from '@ioc:Adonis/Core/Hash'
+import Instrument from './Instrument'
 
+type Builder = ModelQueryBuilderContract<typeof User>
 export default class User extends BaseModel {
   @afterCreate()
   public static async populateOtherColumns(user: User): Promise<void> {
@@ -68,6 +74,11 @@ export default class User extends BaseModel {
   })
   public avatar: BelongsTo<typeof File>
 
+  @manyToMany(() => Instrument, {
+    pivotTable: 'user_instruments',
+  })
+  public instruments: ManyToMany<typeof Instrument>
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -76,4 +87,25 @@ export default class User extends BaseModel {
 
   @column.dateTime()
   public deletedAt?: DateTime
+
+  public static queryRelations = scope((query: Builder, include?: string) => {
+    if (include) {
+      const relations = include.split(',')
+
+      relations.forEach((relation) => {
+        switch (relation) {
+          case 'avatar':
+          case 'instruments':
+            query.preload(relation)
+            break
+
+          default:
+            query
+            break
+        }
+      })
+
+      return query
+    }
+  })
 }
